@@ -6,6 +6,7 @@ from openerp import models, fields
 
 
 class Course(models.Model):
+
     _name = 'openacademy.course'
     _description = "Course"    
 

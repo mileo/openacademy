@@ -36,4 +36,3 @@ class Tests(TransactionCase):
             'duration': 30,
             'seats': 100,
         })
-
