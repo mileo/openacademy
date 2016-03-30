@@ -15,6 +15,7 @@
         "base",
     ],
     "data": [
-        'views/openacademy.xml'
+        'security/ir.model.access.csv',
+        'views/openacademy.xml',
     ]
 }
