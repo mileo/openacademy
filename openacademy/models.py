@@ -52,6 +52,8 @@ class Session(models.Model):
     end_date = fields.Date(string="End Date", store=True,
                            compute='_compute_end_date')
     duration = fields.Float(help="Duration in days")
+    duration_hours = fields.Float(string="Duration in hours",
+                         compute='_compute_duration_hours')
     seats = fields.Integer(string="Number of seats")
     taken_seats = fields.Float(string="Taken seats", compute='_taken_seats')
     active = fields.Boolean(default=True)
@@ -65,6 +67,27 @@ class Session(models.Model):
                                 required=True)
     attendee_ids = fields.One2many(
         'openacademy.attendee', 'session_id', string="Attendees")
+    attendees = fields.Integer(
+        string="Number of Attendees", compute='_compute_attendees', store=True)
+    color = fields.Integer()
+    state = fields.Selection([
+        ('draft', "Draft"),
+        ('confirmed', "Confirmed"),
+        ('done', "Done"),
+    ], default='draft')
+
+    @api.multi
+    def action_draft(self):
+        self.state = 'draft'
+
+    @api.multi
+    def action_confirm(self):
+        self.state = 'confirmed'
+
+    @api.multi
+    def action_done(self):
+        self.state = 'done'
+        self.active = 0
 
     @api.depends('start_date', 'duration')
     def _compute_end_date(self):
@@ -73,6 +96,17 @@ class Session(models.Model):
                 start = fields.Datetime.from_string(r.start_date)
                 duration = timedelta(days=r.duration, seconds=-1)
                 r.end_date = start + duration
+
+    @api.depends('duration')
+    def _compute_duration_hours(self):
+        for r in self:
+            if r.duration:
+                r.duration_hours = r.duration * 24
+
+    @api.depends('attendee_ids')
+    def _compute_attendees(self):
+        for r in self:
+            r.attendees = len(r.attendee_ids)
 
     @api.depends('seats', 'attendee_ids')
     def _taken_seats(self):
