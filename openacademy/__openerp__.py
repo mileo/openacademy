@@ -22,15 +22,12 @@
 
     # any module necessary for this one to work correctly
     'depends': ['base'],
-
+    'test':[
+    ],
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'templates.xml',
         'views/openacademy.xml',
     ],
     # only loaded in demonstration mode
-    'demo': [
-        'demo.xml',
-    ],
 }
