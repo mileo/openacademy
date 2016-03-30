@@ -2,6 +2,7 @@
 
 from openerp import models, fields, api
 
+
 class Course(models.Model):
     _name = 'openacademy.course'
 
@@ -9,9 +10,11 @@ class Course(models.Model):
     description = fields.Text()
 
     responsible_id = fields.Many2one('res.users',
-        ondelete='set null', string="Responsible", index=True)
+                                     ondelete='set null', string="Responsible",
+                                     index=True)
     session_ids = fields.One2many(
         'openacademy.session', 'course_id', string="Sessions")
+
 
 class Session(models.Model):
     _name = 'openacademy.session'
@@ -21,11 +24,14 @@ class Session(models.Model):
     duration = fields.Float(help="Duration in days")
     seats = fields.Integer(string="Number of seats")
 
-    instructor_id = fields.Many2one('res.partner', string="Instructor")
+    instructor_id = fields.Many2one('res.partner', string="Instructor",
+                                    domain=[('is_instructor', '=', True)])
     course_id = fields.Many2one('openacademy.course',
-        ondelete='cascade', string="Course", required=True)
+                                ondelete='cascade', string="Course",
+                                required=True)
     attendee_ids = fields.One2many(
         'openacademy.attendee', 'session_id', string="Attendees")
+
 
 class Attendee(models.Model):
     _name = 'openacademy.attendee'
@@ -34,4 +40,10 @@ class Attendee(models.Model):
 
     partner_id = fields.Many2one('res.partner', string="Partner")
     session_id = fields.Many2one('openacademy.session',
-        ondelete='cascade', string="Session")
+                                 ondelete='cascade', string="Session")
+
+
+class Partner(models.Model):
+    _inherit = 'res.partner'
+
+    is_instructor = fields.Boolean("Instructor", default=False)
