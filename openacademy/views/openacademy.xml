@@ -2,68 +2,44 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="course_tree_view">
-            <field name="name">course.tree</field>
-            <field name="model">openacademy.course</field>
-            <field name="arch" type="xml">
-                <tree string="Course Tree">
-                    <field name="name"/>
-                    <field name="description"/>
-                </tree>
-            </field>
-        </record>
+    <record model="ir.actions.act_window" id="openacademy_course_action">
+        <field name="name">Course</field>
+        <field name="res_model">openacademy.course</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 
-        <record model="ir.ui.view" id="course_form_view">
-            <field name="name">course.form</field>
-            <field name="model">openacademy.course</field>
-            <field name="arch" type="xml">
-                <form string="Course Form">
-                    <sheet>
-                        <group>
-                            <field name="name"/>
-                        </group>
-                        <notebook>
-                            <page string="Description">
-                                <group>
-                                    <field name="description"/>
-                                </group>
-                            </page>
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+    <menuitem id="openacademy_course_menu"
+              name="Open Academy" sequence="10"/>
 
-        <record model="ir.actions.act_window" id="course_list_action">
-            <field name="name">Courses</field>
-            <field name="res_model">openacademy.course</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Create the first course
-                </p>
-            </field>
-        </record>
+    <menuitem id="openacademy_course_sub_menu"
+              name="Open Academy" sequence="10"
+              parent="openacademy_course_menu"/>
 
-        <record model="ir.actions.act_window" id="session_list_action">
-            <field name="name">Sessions</field>
-            <field name="res_model">openacademy.session</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">Create the first session
-                </p>
-            </field>
-        </record>
+    <menuitem id="openacademy_course_item"
+              name="Curso" sequence="10"
+              parent="openacademy_course_sub_menu"
+              action="openacademy_course_action"/>
 
+    <record model="ir.ui.view" id="openacademy_course_view_form">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.course</field>
+        <field name="type">form</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Meus Cursos">
+                <div class="oe_title">
+                    <label for="name"
+                           class="oe_edit_only"
+                           string="Course name" />
+                    <h1><field name="name"/></h1>
+                </div>
+                <separator string="Geral" colspan="2" />
+                <group colspan="2" col="2">
+                    <field nolabel="1" name="description" placeholder="Course description..." />
+                </group>
+        </form>
+        </field>
+    </record>
 
-        <menuitem id="main_openacademy_menu" name="Open Academy"/>
-        <menuitem id="openacademy_menu" name="Open Academy"
-                  parent="main_openacademy_menu"/>
-        <menuitem id="courses_menu" name="Courses" parent="openacademy_menu"
-                  action="course_list_action"/>
-        <menuitem id="session_menu" name="Sessions"
-                  parent="openacademy_menu"
-                  action="session_list_action"/>
     </data>
 </openerp>
