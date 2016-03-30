@@ -2,12 +2,11 @@
 # © 2015 Luis Felipe Mileo
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
-from openerp import fields
 import openerp.tests.common as common
+from openerp import fields
 
 
 class TestOpenAcademy(common.TransactionCase):
-
     def setUp(self):
         super(TestOpenAcademy, self).setUp()
         self.res_partner_model = self.env['res.partner']
@@ -27,10 +26,10 @@ class TestOpenAcademy(common.TransactionCase):
         course = self.course_model.create({
             'name': 'CCO',
             'description': 'Ciencias da computacao',
-            'responsible_id': responsible.id ,
+            'responsible_id': responsible.id,
         })
         self.session_model = self.env['openacademy.session']
-        session1 = self.session_model.create({
+        self.session_model.create({
             'name': '2016/1',
             'description': 'Ciencias da computacao',
             'start_date': fields.Date.today(),
@@ -38,7 +37,7 @@ class TestOpenAcademy(common.TransactionCase):
             'instructor_id': instructor.id,
             'course_id': course.id,
             'attendee_ids': [(0, 0, {
-                    'partner_id': self.ref(
-                        'sale_commission.res_partner_pritesh_sale_agent'),
-                })]
+                'partner_id': self.ref(
+                    'sale_commission.res_partner_pritesh_sale_agent'),
+            })]
         })
