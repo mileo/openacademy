@@ -14,4 +14,6 @@ class Course(models.Model):
         string="Title",
         required=True
     )
-    description = fields.Text()
+    description = fields.Text(
+        string="Description"
+    )
