@@ -2,12 +2,6 @@
 <openerp>
     <data>
 
-    <record model="ir.actions.act_window" id="openacademy_course_action">
-        <field name="name">Course</field>
-        <field name="res_model">openacademy.course</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
     <menuitem id="openacademy_course_menu"
               name="Open Academy" sequence="10"/>
 
@@ -15,6 +9,25 @@
               name="Open Academy" sequence="10"
               parent="openacademy_course_menu"/>
 
+    <record model="ir.actions.act_window" id="openacademy_course_action">
+        <field name="name">Course</field>
+        <field name="res_model">openacademy.course</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a curso.
+              </p><p>
+                You must define a product for everything you sell, whether it's
+                a physical product, a consumable or a service you offer to
+                customers.
+              </p><p>
+                The product form contains information to simplify the sale
+                process: price, notes in the quotation, accounting data,
+                procurement methods, etc.
+              </p>
+            </field>
+    </record>
+        
     <menuitem id="openacademy_course_item"
               name="Curso" sequence="10"
               parent="openacademy_course_sub_menu"
@@ -47,5 +60,99 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="openacademy_course_view_tree">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.course</field>
+        <field name="type">tree</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="Meus Cursos">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="openacademy_attendee_action">
+        <field name="name">Attendee</field>
+        <field name="res_model">openacademy.attendee</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="openacademy_attendee_item"
+              name="Attendee" sequence="10"
+              parent="openacademy_course_sub_menu"
+              action="openacademy_attendee_action"/>
+
+    <record model="ir.ui.view" id="openacademy_attendee_view_form">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.attendee</field>
+        <field name="type">form</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Attendee">
+                <div class="oe_title">
+                    <label for="name"
+                           class="oe_edit_only"
+                           string="Attendee name" />
+                    <h1><field name="name"/></h1>
+                </div>
+        </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_attendee_view_tree">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.attendee</field>
+        <field name="type">tree</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="Attendee">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="openacademy_session_action">
+        <field name="name">Session</field>
+        <field name="res_model">openacademy.session</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="openacademy_session_item"
+              name="Session" sequence="10"
+              parent="openacademy_course_sub_menu"
+              action="openacademy_session_action"/>
+
+    <record model="ir.ui.view" id="openacademy_session_view_form">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">form</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="Meus Cursos">
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="duration"/>
+                <field name="seats"/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_session_view_tree">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">tree</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="Meus Cursos">
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="duration"/>
+                <field name="seats"/>
+            </tree>
+        </field>
+    </record>
+        
     </data>
 </openerp>
