@@ -13,7 +13,7 @@ class ModelA(models.Model):
     def call(self):
         return "Model: {}".format(self._model)
 
-class ModelB(ModelA):
+class ModelB(models.Model):
     """
         Class Inheritance
             - Used to add features
@@ -50,9 +50,17 @@ class ModelD(models.Model):
     _name = "model.d"
     _inherits = {'model.a': 'model_a_id'}
 
+    d1 = fields.Integer(
+        string="D1"
+    )
+
 class ModelE(ModelA):
     """
         Herança padrão do python
     """
     _name = "model.e"
     _description = "Model E"
+
+    e1 = fields.Integer(
+        string="E1"
+    )
