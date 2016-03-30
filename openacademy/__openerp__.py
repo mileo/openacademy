@@ -7,7 +7,7 @@
     "version": "8.0.1.0.0",
     "category": "Custom",
     "website": "https://www.kmee.com.br",
-    "author": "Daniel Torres,KMEE,Odoo Community Association (OCA)",
+    "author": "KMEE, Odoo Community Association (OCA)",
     "license": "AGPL-3",
     "application": False,
     "installable": True,

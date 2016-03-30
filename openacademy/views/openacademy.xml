@@ -40,18 +40,18 @@
             </field>
         </record>
 
-
         <record model="ir.ui.view" id="session_tree_view">
             <field name="name">session.tree</field>
             <field name="model">openacademy.session</field>
             <field name="arch" type="xml">
-                <tree string="Session Tree">
+                <tree string="Session Tree" colors="#0000ff:duration&lt;5;#ff0000:duration&gt;15">
                     <field name="name"/>
                     <field name="course_id"/>
+                    <field name="taken_seats"/>
+                    <field name="duration" invisible="1"/>
                 </tree>
             </field>
         </record>
-
 
         <record model="ir.ui.view" id="session_form_view">
             <field name="name">session.form</field>
@@ -62,10 +62,12 @@
                         <group>
                             <field name="name"/>
                             <field name="start_date"/>
+                            <field name="end_date"/>
                             <field name="duration"/>
                             <field name="seats"/>
                             <field name="instructor_id"/>
                             <field name="course_id"/>
+                            <field name="taken_seats" widget="progressbar"/>
                         </group>
                         <notebook>
                             <page string="Attendees">
@@ -76,6 +78,19 @@
                         </notebook>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="session_calendar_view">
+            <field name="name">session.calendar</field>
+            <field name="model">openacademy.session</field>
+            <field name="arch" type="xml">
+                <calendar string="Session Calendar" date_start="start_date"
+                          date_stop="end_date"
+                          color="instructor_id">
+                    <field name="name"/>
+                </calendar>
             </field>
         </record>
 
@@ -105,35 +120,32 @@
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="contact_cat_list_action">
-            <field name="name">Contact Tags</field>
+        <record model="ir.actions.act_window" id="partner_tag_list_action">
+            <field name="name">Partner Tags</field>
             <field name="res_model">res.partner.category</field>
             <field name="view_mode">tree,form</field>
         </record>
-        <menuitem id="contact_cat_menu" name="Instructor Tags"
-                  parent="configuration_menu"
-                  action="contact_cat_list_action"/>
 
         <record model="res.partner.category" id="teacher1">
-            <field name="name">Teacher / Level 1</field>
+            <field name="name">Teacher Level 1</field>
         </record>
         <record model="res.partner.category" id="teacher2">
-            <field name="name">Teacher / Level 2</field>
+            <field name="name">Teacher Level 2</field>
         </record>
 
         <record model="ir.actions.act_window" id="session_list_action">
             <field name="name">Sessions</field>
             <field name="res_model">openacademy.session</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,calendar</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">Create the first session
                 </p>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="contact_list_action">
-            <field name="name">Contacts</field>
+        <record model="ir.actions.act_window" id="partner_list_action">
+            <field name="name">Partners</field>
             <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form</field>
         </record>
@@ -147,8 +159,11 @@
         <menuitem id="session_menu" name="Sessions"
                   parent="openacademy_menu"
                   action="session_list_action"/>
-        <menuitem id="contact_menu" name="Contacts"
+        <menuitem id="partner_menu" name="Partners"
                   parent="openacademy_menu"
-                  action="contact_list_action"/>
+                  action="partner_list_action"/>
+        <menuitem id="partner_tag_menu" name="Partner Tags"
+                  parent="openacademy_menu"
+                  action="partner_tag_list_action"/>
     </data>
 </openerp>
