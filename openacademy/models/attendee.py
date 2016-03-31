@@ -14,3 +14,9 @@ class Attendee(models.Model):
         string="Name",
         help="Insira o nome do Attendee"
     )
+    session_id = fields.Many2one(
+        comodel_name="openacademy.session"
+    )
+    partner_id = fields.Many2one(
+        comodel_name="res.partner"
+    )

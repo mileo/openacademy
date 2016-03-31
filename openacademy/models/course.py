@@ -17,3 +17,10 @@ class Course(models.Model):
     description = fields.Text(
         string="Description"
     )
+    responsible_id = fields.Many2one(
+        comodel_name='res.users',
+    )
+    session_ids = fields.One2many(
+        comodel_name='openacademy.session',
+        inverse_name='course_id',
+    )
