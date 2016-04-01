@@ -3,6 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
 
 from openerp import fields, models, api
+from openerp.exceptions import Warning as UserError
+import dateutil.relativedelta
 
 
 class Session(models.Model):
@@ -16,6 +18,11 @@ class Session(models.Model):
     )
     start_date = fields.Date(
         string=u"Data de inicio",
+        default=fields.Date.today()
+    )
+    stop_date = fields.Date(
+        string=u"Stop Date",
+        compute='_compute_stop_date',
     )
     duration = fields.Integer(
         string=u"Duração (dias)"
@@ -44,16 +51,19 @@ class Session(models.Model):
     teacher_domain = fields.Char(
         compute="_compute_teacher_domain"
     )
-    available_seats = fields.Float(
-        compute="_compute_available_seats"
+    taken_seats = fields.Float(
+        compute="_compute_taken_seats",
+        store=True,
     )
 
     @api.multi
     @api.depends('seats', 'attendee_ids')
-    def _compute_available_seats(self):
+    def _compute_taken_seats(self):
         for record in self:
-            if record.seats and record.seats > 0 and record.attendee_ids:
-                record.available_seats = float(
+            if record.seats < 0:
+                raise UserError("Voce conhece o Dunha?")
+            if record.seats and record.attendee_ids:
+                record.taken_seats = float(
                     len(record.attendee_ids.ids)) / float(record.seats) * 100
 
     @api.multi
@@ -66,3 +76,34 @@ class Session(models.Model):
                     if r.teacher_category:
                         result.append(r.teacher_category)
                 record.teacher_domain = result
+
+    @api.onchange('instructor_id')
+    def _onchange_teacher_category(self):
+        if self.instructor_id:
+            self.teacher_category = \
+                self.instructor_id.teacher_category
+
+    _sql_constraints = [
+        ('name_uniq', 'unique(name)', 'Name must be unique per company!'),
+    ]
+
+    @api.constrains('name')
+    def _check_seats(self):
+        if self.seats < 0:
+            raise UserError('Total de vagas deve ser maior que zero!')
+
+    @api.one
+    def copy(self, default=None):
+        default['name'] = self.name + " (copy)"
+        return super(Session, self).copy(default)
+
+    @api.multi
+    @api.depends('start_date', 'duration')
+    def _compute_stop_date(self):
+        for record in self:
+            if record.start_date and record.duration:
+                record.stop_date = (
+                    fields.Date.from_string(record.start_date) +
+                    dateutil.relativedelta.relativedelta(
+                        days=record.duration)
+                )

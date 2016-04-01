@@ -129,7 +129,7 @@
     <record model="ir.actions.act_window" id="openacademy_session_action">
         <field name="name">Session</field>
         <field name="res_model">openacademy.session</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,calendar,graph</field>
     </record>
 
     <menuitem id="openacademy_session_item"
@@ -147,18 +147,19 @@
                 <group>
                     <group>
                         <field name="name"/>
+                        <field name="start_date"/>
                         <field name="duration"/>
                         <field name="seats"/>
                     </group>
                     <group>
-                        <field name="start_date"/>
-                        <field name="teacher_category" widget="radio"/>
+                        <field name="stop_date"/>
+                        <field name="teacher_category"/>
                         <field name="teacher_domain" />
                         <field name="instructor_id"/>
-                        <field name="available_seats"/>
+                        <field name="taken_seats" widget="percentpie"/>
                     </group>
                 </group>
-                <field name="attendee_ids" widget="many2many_tags"/>
+                <field name="attendee_ids" widget="many2many"/>
             </form>
         </field>
     </record>
@@ -170,15 +171,41 @@
         <field name="priority" eval="1"/>
         <field name="arch" type="xml">
             <tree string="Meus Cursos">
+                  <!--colors="blue:name==''"-->
                 <field name="name"/>
                 <field name="start_date"/>
+                <field name="stop_date"/>
                 <field name="duration"/>
                 <field name="seats"/>
-                <field name="attendee_ids" widget="x2many_counter"/>
-                <field name="available_seats" widget="progressbar"/>
+                <field name="taken_seats" widget="progressbar"/>
             </tree>
         </field>
     </record>
-        
+
+    <record model="ir.ui.view" id="openacademy_session_view_calendar">
+        <field name="name">view.name</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">calendar</field>  <!-- tree,form,calendar,search,graph,gantt -->
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <calendar string="Meus Cursos" date_start="start_date">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="openacademy_session_view_graph">
+        <field name="name">openacademy.session.graph</field>
+        <field name="model">openacademy.session</field>
+        <field name="type">graph</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <calendar string="Meus Cursos" type="bar">
+                <field name="seats" type="row"/>
+                <field name="taken_seats" type="row"/>
+                <field name="teacher_category" type="measure"/>
+            </calendar>
+        </field>
+    </record>
     </data>
 </openerp>
