@@ -18,7 +18,8 @@ class Session(models.Model):
     )
     start_date = fields.Date(
         string=u"Data de inicio",
-        default=fields.Date.today()
+        default=fields.Date.today(),
+        copy=False,
     )
     stop_date = fields.Date(
         string=u"Stop Date",
@@ -47,6 +48,8 @@ class Session(models.Model):
             ('level2', 'Level 2'),
         ],
         string="Teacher Category",
+        related='instructor_id.teacher_category',
+        readonly=True,
     )
     teacher_domain = fields.Char(
         compute="_compute_teacher_domain"
@@ -61,7 +64,7 @@ class Session(models.Model):
     def _compute_taken_seats(self):
         for record in self:
             if record.seats < 0:
-                raise UserError("Voce conhece o Dunha?")
+                raise UserError("Computed seats < 0")
             if record.seats and record.attendee_ids:
                 record.taken_seats = float(
                     len(record.attendee_ids.ids)) / float(record.seats) * 100
@@ -76,12 +79,6 @@ class Session(models.Model):
                     if r.teacher_category:
                         result.append(r.teacher_category)
                 record.teacher_domain = result
-
-    @api.onchange('instructor_id')
-    def _onchange_teacher_category(self):
-        if self.instructor_id:
-            self.teacher_category = \
-                self.instructor_id.teacher_category
 
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Name must be unique per company!'),
